@@ -75,13 +75,17 @@ void	func_int(int *const G)
 }
 
 #include <string>
-#include <stdio.h>
+#include <cmath>
+#include "ScalarConverter.hpp"
 
 int	main(int const ac, char const *const *const av)
 {
-	float f = 42.0f;
-	int n = 42;
-	convert(std::string(av[1]));
-	printf("%f\n", (float)n); // static cast
-	printf("%f\n", *(float *)&n); // reinterpret cast
+	if (ac != 2)
+	{
+		std::cerr << "invalid number of arg\n";
+		return 1;
+	}
+	std::string	literal(av[1]);
+	ScalarConverter::convert(literal);
+	return 0;
 }
