@@ -37,14 +37,14 @@ ScalarConverter::~ScalarConverter(void)
 
 #include <cctype>
 #include <cmath>
-#include <algorithm>
 #include <string>
+#include <iomanip>
 
 inline static bool	validCharFloat(std::string const &literal)
 {
 	bool	is_dot = false;
 
-	for (int i = 0; literal[i]; i++)
+	for (size_t i = 0; i < literal.length() - 1; i++)
 	{
 		if (isdigit(literal[i]) == false)
 		{
@@ -89,35 +89,26 @@ inline static bool	isChar(std::string const &literal)
 
 inline static bool	isInt(std::string const &literal)
 {
-	if (std::all_of(literal.begin(), literal.end(), isdigit) == false)
+	for (int i = 0; literal[i]; i++)
+		if (isdigit(literal[i]) == false)
+			return false;
+	if (atol(literal.c_str()) > 21247483647 || atol(literal.c_str()) < -2147483648)
 		return false;
-	try 
-	{
-		stoi(literal);
-	}
-	catch (std::exception const &e)
-	{
-		return false;
-	}
 	return true;
 }
+
+#include <stdio.h>
 
 inline static bool	isFloat(std::string const &literal)
 {
 	if (literal == "+inff" || literal == "-inff" || literal == "nanf")
 		return true;
-	if (literal.back() != 'f')
+	if (literal[literal.length() - 1] != 'f')
 		return false;
-	if (std::all_of(literal.begin(), literal.back() - 1, validCharFloat) == false)
+	if (validCharFloat(literal) == false)
 		return false;
-	try
-	{
-		stof(literal);
-	}
-	catch (std::exception const &e)
-	{
+	if (atof(literal.c_str()) == 0.0 && literal[0] != '0')
 		return false;
-	}
 	return true;
 }
 
@@ -125,11 +116,9 @@ inline static bool	isDouble(std::string const &literal)
 {
 	if (literal == "+inf" || literal == "-inf" || literal == "nan")
 		return true;
-	if (std::all_of(literal.begin(), literal.back() - 1, validCharDouble) == false)
+	if (validCharDouble(literal) == false)
 		return false;
-	try
-		stof(literal);
-	catch(std::exception const &e)
+	if (atof(literal.c_str()) == 0.0 && literal[0] != '0')
 		return false;
 	return true;
 }
@@ -152,7 +141,7 @@ void	manageNanInf(std::string const &literal)
 		std::cout << "float : -inff" << "\n";
 }
 
-static void	ScalarConverter::convert(std::string const &literal)
+void	ScalarConverter::convert(std::string const &literal)
 {
 	char	c;
 	int		i;
@@ -166,19 +155,25 @@ static void	ScalarConverter::convert(std::string const &literal)
 		i = static_cast<int>(c);
 		std::cout << "int : " << i << "\n";
 		f = static_cast<float>(c);
-		std::cout << "float : " << f << "\n";
+		std::cout << "float : " << f << "f\n";
 		d = static_cast<double>(c);
-		std::cout << "double : " << d << "\n";
+		std::cout << "double : " << d << ".0\n";
 	}
 	else if (isInt(literal) == true)
 	{
-		i = stoi(literal);
+		i = atoi(literal.c_str());
 		std::cout << "int : " << i << "\n";
-		std::cout << "char : impossible\n";
+		if (i > 0 && i < 127)
+		{	
+			c = static_cast<char>(i);
+			std::cout << "char : " << c << "\n";
+		}
+		else
+			std::cout << "char : impossible\n";
 		f = static_cast<float>(i);
-		std::cout << "float : " << f << "\n";
+		std::cout << "float : " << f << "f\n";
 		d = static_cast<double>(i);
-		std::cout << "double : " << d << "\n";
+		std::cout << "double : " << d << ".0\n";
 	}
 	else if (isFloat(literal) == true)
 	{
@@ -186,8 +181,8 @@ static void	ScalarConverter::convert(std::string const &literal)
 			manageNanInf(literal);
 		else
 		{
-			f = stof(literal);
-			std::cout << "float : " << f << "\n";
+			f = atof(literal.c_str());
+			std::cout << std::setprecision(1) << std::fixed << "float : " << f << "f\n";
 			if (f > 0.0f && f < 127.0f)
 			{	
 				c = static_cast<char>(f);
@@ -203,7 +198,7 @@ static void	ScalarConverter::convert(std::string const &literal)
 			else
 				std::cout << "int : impossible\n";
 			d = static_cast<double>(f);
-			std::cout << "double : " << d << "\n";
+			std::cout << std::setprecision(1) << std::fixed << "double : " << d << "\n";
 		}
 	}
 	else if (isDouble(literal) == true)
@@ -212,8 +207,9 @@ static void	ScalarConverter::convert(std::string const &literal)
 			manageNanInf(literal);
 		else
 		{
-			d = stod(literal);
-			std::cout << "double : " << d << "\n";
+			f = atof(literal.c_str());
+			d = static_cast<double>(f);
+			std::cout << std::setprecision(1) << std::fixed << "double : " << d << "\n";
 			if (d > 0.0 && d < 127.0)
 			{	
 				c = static_cast<char>(d);
@@ -228,8 +224,7 @@ static void	ScalarConverter::convert(std::string const &literal)
 			}
 			else
 				std::cout << "int : impossible\n";
-			f = static_cast<float>(d);
-			std::cout << "float : " << double << "\n";
+			std::cout << std::setprecision(1) << std::fixed << "float : " << f << "f\n";
 		}
 	}
 	else
@@ -243,7 +238,7 @@ static void	ScalarConverter::convert(std::string const &literal)
 
 // Operator //
 
-ScalarConverter	ScalarConverter::&operator=(ScalarConverter const &src __attribute__((unused)))
+ScalarConverter	&ScalarConverter::operator=(ScalarConverter const &src __attribute__((unused)))
 {
 	if (DEBUG)
 		std::cout << "ScalarConverter copy operator called\n";

@@ -69,14 +69,8 @@ Casts en C:
 	int:   0x0000002a
 */
 
-void	func_int(int *const G)
-{
-	int	*a = (int *)0xff2a;
-}
-
-#include <string>
-#include <cmath>
 #include "ScalarConverter.hpp"
+#include <iostream>
 
 int	main(int const ac, char const *const *const av)
 {

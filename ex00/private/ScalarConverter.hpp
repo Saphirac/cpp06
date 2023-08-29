@@ -29,7 +29,7 @@ public :
 	ScalarConverter(ScalarConverter const &src);
 	~ScalarConverter(void);
 
-	static void	converter(std::string const &literal);
+	static void	convert(std::string const &literal);
 
 	ScalarConverter	&operator=(ScalarConverter const &src);
 };
