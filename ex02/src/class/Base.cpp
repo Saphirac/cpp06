@@ -63,11 +63,12 @@ void	identify(Base *p)
 
 void	identify(Base &p)
 {
+	Base	tmp; 
 	if (DEBUG)
 		std::cout << "identify ref version function called\n";
 	try 
 	{
-		dynamic_cast<A &>(p);
+		tmp = dynamic_cast<A &>(p);
 		std::cout << "Base object is : A\n";
 		return ;
 	}
@@ -75,7 +76,7 @@ void	identify(Base &p)
 	{
 		try 
 		{
-			dynamic_cast<B &>(p);
+			tmp = dynamic_cast<B &>(p);
 			std::cout << "Base object is : B\n";
 			return ;
 		}
@@ -83,7 +84,7 @@ void	identify(Base &p)
 		{
 			try 
 			{
-				dynamic_cast<C &>(p);
+				tmp = dynamic_cast<C &>(p);
 				std::cout << "Base object is : C\n";
 				return ;
 			}

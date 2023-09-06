@@ -16,11 +16,15 @@
 
 int	main(int ac, char **av)
 {
-	(void)ac;
 	uintptr_t	test;
 	Data		*ptr_test;
 	uintptr_t	result;
 
+	if (ac != 2)
+	{
+		std::cerr << "Incorrect number of args\n";
+		return 1;
+	}	
 	test = static_cast<uintptr_t>(atoi(av[1]));
 	ptr_test = Serializer::deserialize(test);
 	result = Serializer::serialize(ptr_test);
@@ -29,4 +33,5 @@ int	main(int ac, char **av)
 	<< "deserialize test ; ptr_test : " << ptr_test << '\n'
 	<< "serialize test ; result hex value : " << "0x" << result << '\n'
 	<< "serialize test ; result : " << std::dec << result << '\n';
+	return 0;
 }

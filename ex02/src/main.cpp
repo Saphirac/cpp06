@@ -24,4 +24,6 @@ int	main()
 	identify(testptr);
 	Base	&testref = *generate();
 	identify(testref);
+	delete testptr;
+	delete &testref;
 }
