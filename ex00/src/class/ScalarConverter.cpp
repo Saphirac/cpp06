@@ -128,17 +128,35 @@ void	manageNanInf(std::string const &literal)
 	std::cout << "char : impossible\n"
 	<< "int : impossible\n";
 	if (literal == "nanf")
-		std::cout << "double : nan" << "\n";
-	if (literal == "+inff")
-		std::cout << "double : +inf" << "\n";
-	if (literal == "-inff")
-		std::cout << "double : -inf" << "\n";
-	if (literal == "nan")
+	{
 		std::cout << "float : nanf" << "\n";
-	if (literal == "+inf")
+		std::cout << "double : nan" << "\n";
+	}
+	if (literal == "+inff")
+	{
 		std::cout << "float : +inff" << "\n";
-	if (literal == "-inf")
+		std::cout << "double : +inf" << "\n";
+	}
+	if (literal == "-inff")
+	{
 		std::cout << "float : -inff" << "\n";
+		std::cout << "double : -inf" << "\n";
+	}
+	if (literal == "nan")
+	{
+		std::cout << "double : nan" << "\n";
+		std::cout << "float : nanf" << "\n";
+	}
+	if (literal == "+inf")
+	{
+		std::cout << "double : +inf" << "\n";
+		std::cout << "float : +inff" << "\n";
+	}
+	if (literal == "-inf")
+	{
+		std::cout << "double : -inf" << "\n";
+		std::cout << "float : -inff" << "\n";
+	}
 }
 
 void	ScalarConverter::convert(std::string const &literal)
