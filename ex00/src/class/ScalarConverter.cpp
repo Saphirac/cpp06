@@ -92,7 +92,7 @@ inline static bool	isInt(std::string const &literal)
 	for (int i = 0; literal[i]; i++)
 		if (isdigit(literal[i]) == false)
 			return false;
-	if (atol(literal.c_str()) > 21247483647 || atol(literal.c_str()) < -2147483648)
+	if (atol(literal.c_str()) > 2147483647 || atol(literal.c_str()) < -2147483648)
 		return false;
 	return true;
 }
